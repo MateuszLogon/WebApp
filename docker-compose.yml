@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:16
+    container_name: webapp-db
+    environment:
+      POSTGRES_USER: webappuser
+      POSTGRES_PASSWORD: webapppassword
+      POSTGRES_DB: webappdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  web:
+    build: ./backend
+    container_name: webapp-web
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_NAME=webappdb
+      - DATABASE_USER=webappuser
+      - DATABASE_PASSWORD=webapppassword
+    depends_on:
+      - db
+
+volumes:
+  db_data:
