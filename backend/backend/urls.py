@@ -16,9 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from accounts.views import register  # import widoku register
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')),
+    path('accounts/', include('accounts.urls')),  # login, logout, register
+    path('shop/', include('shop.urls')),          # shopping list
+    path('', register, name='home'),             # root -> registration page
 ]
 
