@@ -63,11 +63,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-LOGIN_URL = '/account/login/'
-LOGIN_REDIRECT_URL = '/account/post_login_redirect/'
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = '/shop/'
 LOGOUT_REDIRECT_URL = '/account/login/'
 
-TWO_FACTOR_FORCE_OTP = True 
+TWO_FACTOR_FORCE_OTP = True
+
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -131,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Warsaw'
 
 USE_I18N = True
 

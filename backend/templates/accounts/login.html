@@ -7,6 +7,11 @@
     {% csrf_token %}
     {{ form.non_field_errors }}
 
+    <!-- 🔹 zachowaj parametr "next" -->
+    {% if next %}
+    <input type="hidden" name="next" value="{{ next }}">
+    {% endif %}
+
     <div class="mb-3">
         <label for="id_username">Login:</label>
         {{ form.username }}
