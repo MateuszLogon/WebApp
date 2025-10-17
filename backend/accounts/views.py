@@ -1,12 +1,40 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django_otp.plugins.otp_totp.models import TOTPDevice
+from django.contrib.auth.decorators import login_required
+
 
 def register(request):
+    """Rejestracja nowego użytkownika."""
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()  # 👈 creates user in the database
-            return redirect('login')  # you can redirect wherever you want
+            user = form.save()
+            login(request, user)
+            return redirect('two_factor:setup')
     else:
-        form = RegisterForm()
+        form = UserCreationForm()
     return render(request, 'accounts/register.html', {'form': form})
+
+
+def post_login_redirect(request):
+    """Po zwykłym logowaniu decydujemy, co dalej."""
+    if not request.user.is_authenticated:
+        return redirect('accounts:login')
+
+    # Sprawdź, czy użytkownik ma aktywny (potwierdzony) TOTP
+    has_mfa = TOTPDevice.objects.filter(user=request.user, confirmed=True).exists()
+
+    if not has_mfa:
+        print("➡️ Brak MFA – przekierowuję do setup")
+        return redirect('two_factor:setup')
+
+    print("➡️ MFA aktywne – przekierowuję do login tokenem")
+    return redirect('two_factor:login')
+
+
+@login_required
+def mfa_setup_complete(request):
+    """Po zakończeniu konfiguracji MFA przekierowuje użytkownika do logowania MFA."""
+    return redirect('two_factor:login')

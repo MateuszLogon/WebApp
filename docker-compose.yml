@@ -5,9 +5,10 @@ services:
     image: postgres:16
     container_name: webapp-db
     environment:
-      POSTGRES_USER: webappuser
-      POSTGRES_PASSWORD: webapppassword
-      POSTGRES_DB: webappdb
+      - TZ=Europe/Warsaw
+      - POSTGRES_USER=webappuser
+      - POSTGRES_PASSWORD=webapppassword
+      - POSTGRES_DB=webappdb
     ports:
       - "5432:5432"
     volumes:
@@ -22,6 +23,7 @@ services:
     ports:
       - "8000:8000"
     environment:
+      - TZ=Europe/Warsaw  
       - DATABASE_HOST=db
       - DATABASE_NAME=webappdb
       - DATABASE_USER=webappuser

@@ -1,13 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django_otp.decorators import otp_required
 from .models import Item
 from .forms import ItemForm
 
+
+@otp_required
 @login_required
 def item_list(request):
     """
-    Displays the list of items belonging only to the logged-in user.
-    Also handles the creation of new items via POST.
+    Widok sklepu (lista rzeczy).
+    Dostępny tylko po pełnym zalogowaniu i potwierdzeniu MFA.
     """
     items = Item.objects.filter(user=request.user).order_by('-created_at')
 
@@ -15,10 +18,10 @@ def item_list(request):
         form = ItemForm(request.POST)
         if form.is_valid():
             item = form.save(commit=False)
-            item.user = request.user  # associate with the logged-in user
+            item.user = request.user
             item.save()
             return redirect('item_list')
     else:
         form = ItemForm()
 
-    return render(request, 'shop/item_list.html', {'items': items, 'form': form})
+    return render(request, 'shop/item_list.html')

@@ -1,0 +1,29 @@
+{% extends "base_public.html" %}
+
+{% block content %}
+<div class="auth-container">
+    <h2>Potwierdź uwierzytelnianie dwuskładnikowe</h2>
+
+    <p>Wprowadź sześciocyfrowy kod z aplikacji uwierzytelniającej (np. Google Authenticator, Authy, 1Password).</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ wizard.management_form }}
+        {{ wizard.form.non_field_errors }}
+
+        {% for field in wizard.form %}
+        <div class="mb-3">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">Potwierdź</button>
+    </form>
+
+    <p class="mt-3 text-muted">
+        Jeśli nie masz dostępu do aplikacji, użyj <a href="{% url 'two_factor:backup_tokens' %}">kodów zapasowych</a>.
+    </p>
+</div>
+{% endblock %}

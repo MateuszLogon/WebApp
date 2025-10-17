@@ -1,27 +1,19 @@
-"""
-URL configuration for backend project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
-from accounts.views import register  # import widoku register
+from django.shortcuts import redirect
+from accounts.views import post_login_redirect
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')),  # login, logout, register
-    path('shop/', include('shop.urls')),          # shopping list
-    path('', register, name='home'),             # root -> registration page
+
+    # 🔧 Alias dla globalnego "login" (wymagany przez django-two-factor-auth)
+    path('login/', RedirectView.as_view(pattern_name='accounts:login', permanent=False), name='login'),
+
+    path('account/', include(('accounts.urls', 'accounts'), namespace='accounts')),
+    path('account/two_factor/', include(('accounts.two_factor_urls', 'two_factor'), namespace='two_factor')),
+    path('account/post_login_redirect/', post_login_redirect, name='post_login_redirect'),
+    path('shop/', include(('shop.urls', 'shop'), namespace='shop')),
+    path('', lambda request: redirect('accounts:register'), name='home'),
 ]
 
