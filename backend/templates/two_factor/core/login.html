@@ -1,0 +1,35 @@
+{% extends "base_public.html" %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 400px;">
+    <h2 class="text-center mb-4">Login Authentication</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        {% for field in form %}
+        <div class="mb-3">
+            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+
+        {% if wizard %}
+        {{ wizard.management_form }}
+        {% endif %}
+
+        <div class="d-flex justify-content-center mt-4">
+            <!-- 🔹 Only the centered Log in button -->
+            <button type="submit" class="btn btn-primary px-4">
+                Log in
+            </button>
+        </div>
+    </form>
+
+    <div class="text-center mt-3">
+        <a href="{% url 'accounts:register' %}" class="text-muted small">Don't have an account? Register</a>
+    </div>
+</div>
+{% endblock %}
