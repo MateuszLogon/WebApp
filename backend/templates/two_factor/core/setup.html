@@ -2,23 +2,23 @@
 
 {% block content %}
 <div class="container mt-4" style="max-width: 500px;">
-    <h2 class="text-center mb-4">Ustawienia uwierzytelniania dwuskładnikowego</h2>
+    <h2 class="text-center mb-4">Two-Factor Authentication Setup</h2>
 
     {% if wizard.steps.current == "generator" %}
     <p>
-        Aby zabezpieczyć swoje konto, zeskanuj poniższy kod QR w aplikacji uwierzytelniającej
-        (np. Google Authenticator, Authy, 1Password) lub wprowadź ręcznie klucz poniżej.
+        To secure your account, scan the QR code below using your authenticator app
+        (e.g. Google Authenticator, Authy, 1Password) or manually enter the key shown below.
     </p>
 
     <div class="text-center my-3">
-        <!-- ✅ Prawidłowy sposób wyświetlenia QR kodu -->
-        <img src="{% url 'two_factor:qr' %}" alt="Kod QR" class="border rounded p-2 shadow-sm"
+        <!-- ✅ Proper QR code display -->
+        <img src="{% url 'two_factor:qr' %}" alt="QR Code" class="border rounded p-2 shadow-sm"
             style="max-width: 250px;">
     </div>
 
     {% if wizard.form.secret_key %}
     <p class="text-center">
-        Twój klucz (w razie potrzeby ręcznego wpisania):
+        Your key (for manual entry if needed):
         <code>{{ wizard.form.secret_key.value }}</code>
     </p>
     {% endif %}
@@ -41,19 +41,19 @@
             {% if wizard.steps.prev %}
             <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}"
                 class="btn btn-outline-secondary">
-                Wstecz
+                Back
             </button>
             {% endif %}
             <button type="submit" class="btn btn-primary">
-                {% if wizard.steps.next %}Dalej{% else %}Zakończ{% endif %}
+                {% if wizard.steps.next %}Next{% else %}Finish{% endif %}
             </button>
         </div>
     </form>
 
     {% if backup_tokens %}
     <div class="alert alert-info mt-4">
-        <h5>Kody zapasowe:</h5>
-        <p>Zapisz te kody w bezpiecznym miejscu. Każdy można użyć tylko raz.</p>
+        <h5>Backup Codes:</h5>
+        <p>Save these codes in a secure place. Each code can be used only once.</p>
         <ul>
             {% for token in backup_tokens %}
             <li><code>{{ token }}</code></li>
@@ -64,15 +64,15 @@
 
     {% if wizard.steps.current == "complete" %}
     <div class="alert alert-success mt-4 text-center">
-        <strong>✅ Uwierzytelnianie dwuskładnikowe zostało pomyślnie skonfigurowane!</strong>
+        <strong>✅ Two-factor authentication has been successfully configured!</strong>
     </div>
     <div class="text-center mt-3">
-        <a href="{% url 'shop:item_list' %}" class="btn btn-success">Przejdź do sklepu</a>
+        <a href="{% url 'shop:item_list' %}" class="btn btn-success">Go to Shop</a>
     </div>
     {% endif %}
 
     <div class="text-center mt-4">
-        <a href="{% url 'accounts:logout' %}" class="text-muted small">Wyloguj się</a>
+        <a href="{% url 'two_factor:login' %}" class="text-muted small">Log out</a>
     </div>
 </div>
 {% endblock %}

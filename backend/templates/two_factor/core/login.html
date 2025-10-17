@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container mt-5" style="max-width: 400px;">
-    <h2 class="text-center mb-4">Logowanie z uwierzytelnianiem dwuskładnikowym</h2>
+    <h2 class="text-center mb-4">Login Authentication</h2>
 
     <form method="post">
         {% csrf_token %}
@@ -20,20 +20,16 @@
         {{ wizard.management_form }}
         {% endif %}
 
-        <div class="d-flex justify-content-between align-items-center mt-4">
-            <!-- 🔹 Zmieniony przycisk BACK -->
-            <a href="{% url 'accounts:register' %}" class="btn btn-outline-secondary">
-                Zarejestruj się
-            </a>
-
-            <button type="submit" class="btn btn-primary">
-                Zaloguj się
+        <div class="d-flex justify-content-center mt-4">
+            <!-- 🔹 Only the centered Log in button -->
+            <button type="submit" class="btn btn-primary px-4">
+                Log in
             </button>
         </div>
     </form>
 
     <div class="text-center mt-3">
-        <a href="{% url 'accounts:register' %}" class="text-muted small">Nie masz konta? Zarejestruj się</a>
+        <a href="{% url 'accounts:register' %}" class="text-muted small">Don't have an account? Register</a>
     </div>
 </div>
 {% endblock %}
