@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Your items{% endblock %}
+
 {% block content %}
-  <h2>Your shopping list / to-do</h2>
+<div class="container mt-4" style="max-width: 600px;">
+  <h2 class="text-center mb-4">Your shopping list / to-do</h2>
 
   <form method="post" class="mb-3 d-flex align-items-start gap-2">
     {% csrf_token %}
@@ -12,15 +14,24 @@
 
   <ul class="list-group">
     {% for item in items %}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div>
-          <strong>{{ item.name }}</strong><br/>
-          <small class="text-muted">{{ item.created_at }}</small>
-        </div>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <strong>{{ item.name }}</strong><br />
+        <small class="text-muted">{{ item.created_at|date:"Y-m-d H:i" }}</small>
+      </div>
+      <div class="d-flex align-items-center gap-2">
         <span class="badge bg-primary rounded-pill">{{ item.quantity }}</span>
-      </li>
+
+        <!-- 🗑️ Remove button -->
+        <form method="post" action="{% url 'shop:delete_item' item.id %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+        </form>
+      </div>
+    </li>
     {% empty %}
-      <li class="list-group-item">No items yet — add one above.</li>
+    <li class="list-group-item text-center">No items yet — add one above.</li>
     {% endfor %}
   </ul>
+</div>
 {% endblock %}
