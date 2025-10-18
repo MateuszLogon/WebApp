@@ -3,9 +3,7 @@ from .models import Item
 
 class ItemForm(forms.ModelForm):
     """
-    A simple Django ModelForm for adding new shopping items.
-    - `name` is a text field (what to add)
-    - `quantity` is a numeric field (how many)
+    Form for adding new shopping items.
     """
     class Meta:
         model = Item
@@ -18,6 +16,6 @@ class ItemForm(forms.ModelForm):
             'quantity': forms.NumberInput(attrs={
                 'min': 1,
                 'class': 'form-control',
-                'style': 'width:100px;',
+                'style': 'width: 100px;',
             }),
         }
