@@ -18,23 +18,28 @@ def register(request):
     return render(request, 'accounts/register.html', {'form': form})
 
 
-def post_login_redirect(request):
-    """Po zwykłym logowaniu decydujemy, co dalej."""
-    if not request.user.is_authenticated:
-        return redirect('accounts:login')
+from django.shortcuts import redirect
+from django_otp.plugins.otp_totp.models import TOTPDevice
 
-    # Sprawdź, czy użytkownik ma aktywny (potwierdzony) TOTP
+def post_login_redirect(request):
+    """Decyduje, gdzie przekierować użytkownika po logowaniu."""
+    if not request.user.is_authenticated:
+        return redirect('two_factor:login')
+
+    # Sprawdź, czy użytkownik ma aktywne MFA (TOTP)
     has_mfa = TOTPDevice.objects.filter(user=request.user, confirmed=True).exists()
 
     if not has_mfa:
         print("➡️ Brak MFA – przekierowuję do setup")
-        return redirect('two_factor:setup')
+        return redirect('two_factor:setup')  # konfiguracja Authenticatora
 
-    print("➡️ MFA aktywne – przekierowuję do login tokenem")
-    return redirect('two_factor:login')
+    print("✅ MFA aktywne – przekierowuję do sklepu")
+    return redirect('shop:item_list')  # zamiast two_factor:login
 
 
 @login_required
 def mfa_setup_complete(request):
     """Po zakończeniu konfiguracji MFA przekierowuje użytkownika do logowania MFA."""
     return redirect('two_factor:login')
+
+

@@ -58,14 +58,14 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django_otp.middleware.OTPMiddleware',  # ✅ ważne!
+    'django_otp.middleware.OTPMiddleware',  
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-LOGIN_URL = 'accounts:login'
-LOGIN_REDIRECT_URL = '/shop/'
-LOGOUT_REDIRECT_URL = '/account/login/'
+LOGIN_URL = 'two_factor:login'
+LOGIN_REDIRECT_URL = '/account/post_login_redirect/'
+LOGOUT_REDIRECT_URL = '/account/two_factor/login/'
 
 TWO_FACTOR_FORCE_OTP = True
 
@@ -89,6 +89,20 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
+
+
+# Wymuś wygasanie sesji po zamknięciu przeglądarki
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Limit długości sesji (np. 30 minut)
+SESSION_COOKIE_AGE = 1800  # 30 minut
+
+# Tylko przez HTTPS (dla produkcji)
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Zapobiega współdzieleniu sesji między zakładkami
+SESSION_SAVE_EVERY_REQUEST = True
 
 
 # Database
