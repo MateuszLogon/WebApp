@@ -4,10 +4,10 @@ from django_otp.decorators import otp_required
 from .models import Item
 from .forms import ItemForm
 
-@otp_required
 @login_required
+@otp_required
 def item_list(request):
-    """Display and add items."""
+    """Display and add items (MFA + login required)."""
     items = Item.objects.filter(user=request.user).order_by('-created_at')
 
     if request.method == 'POST' and 'name' in request.POST:
@@ -23,8 +23,8 @@ def item_list(request):
     return render(request, 'shop/item_list.html', {'items': items, 'form': form})
 
 
-@otp_required
 @login_required
+@otp_required
 def delete_item(request, item_id):
     """Delete selected item (only if owned by current user)."""
     item = get_object_or_404(Item, id=item_id, user=request.user)

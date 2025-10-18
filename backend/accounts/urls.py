@@ -16,8 +16,8 @@ urlpatterns = [
         ),
         name='login'
     ),
-    
-    path('logout/', auth_views.LogoutView.as_view(next_page='accounts:login'), name='logout'),
+    path('logout/', views.custom_logout, name='logout'),
+    # path('logout/', auth_views.LogoutView.as_view(next_page='accounts:login'), name='logout'),
 
     # 🔹 Po pierwszym logowaniu — decyduje co dalej
     path('post_login_redirect/', views.post_login_redirect, name='post_login_redirect'),

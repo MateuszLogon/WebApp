@@ -91,18 +91,33 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 
-# Wymuś wygasanie sesji po zamknięciu przeglądarki
+
+# Sesja wygasa przy zamknięciu przeglądarki
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+# NIE używaj 0 – zostaw domyślne lub usuń tę linijkę całkiem.
+# Jeżeli chcesz krótki czas podczas debugowania, np. 20 minut:
+# SESSION_COOKIE_AGE = 20 * 60
+
+# Na localhost zwykle bez HTTPS, więc Secure = False (dla Chrome/FF)
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+
+# Te wartości pomogą przy delete_cookie
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_PATH = '/'
+CSRF_COOKIE_PATH = '/'
+
+# Przy dev często lepiej wyłączyć "zapis co request"
+SESSION_SAVE_EVERY_REQUEST = False
+
 # Limit długości sesji (np. 30 minut)
-SESSION_COOKIE_AGE = 1800  # 30 minut
-
-# Tylko przez HTTPS (dla produkcji)
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
-# Zapobiega współdzieleniu sesji między zakładkami
-SESSION_SAVE_EVERY_REQUEST = True
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# SESSION_COOKIE_AGE = 0  # (nieograniczona, ale tylko w obrębie otwartej przeglądarki)
+# SESSION_SAVE_EVERY_REQUEST = False
+# SESSION_COOKIE_SECURE = False  # tylko na localhost
+# CSRF_COOKIE_SECURE = False
 
 
 # Database
